@@ -1,0 +1,26 @@
+{
+  "name": "sorfabiosantos/api-bio-diversa",
+  "description": "Web Service com IA para Reconhecimento de Imagens das Espécies da Fauna e Flora dos Biomas da Região Carbonífera",
+  "type": "project",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    }
+  },
+  "require": {
+    "php": ">=8.0",
+    "ext-gd": "*",
+    "ext-json": "*",
+    "firebase/php-jwt": "v6.11.1",
+    "phpoffice/phpspreadsheet": "^5.1",
+    "rubix/ml": "^2.5"
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "sort-packages": true
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}

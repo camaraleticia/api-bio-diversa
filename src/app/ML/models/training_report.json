@@ -1,0 +1,69 @@
+{
+    "timestamp": "2025-12-02T12:42:59+00:00",
+    "epochs": 25,
+    "batch_size": 8,
+    "kfold": null,
+    "classes": [
+        "babosa_do_campo",
+        "capivara",
+        "graxaim",
+        "quero-quero"
+    ],
+    "test": {
+        "accuracy": 0.4444444444444444,
+        "macro_f1": 0.20277777777777778,
+        "per_class": {
+            "babosa_do_campo": {
+                "precision": 0.25,
+                "recall": 0.16666666666666666,
+                "f1": 0.2,
+                "support": 6
+            },
+            "capivara": {
+                "precision": 0,
+                "recall": 0,
+                "f1": 0,
+                "support": 4
+            },
+            "graxaim": {
+                "precision": 0.4782608695652174,
+                "recall": 0.8461538461538461,
+                "f1": 0.6111111111111112,
+                "support": 13
+            },
+            "quero-quero": {
+                "precision": 0,
+                "recall": 0,
+                "f1": 0,
+                "support": 4
+            }
+        },
+        "confusion_matrix": {
+            "babosa_do_campo": {
+                "babosa_do_campo": 1,
+                "capivara": 0,
+                "graxaim": 5,
+                "quero-quero": 0
+            },
+            "capivara": {
+                "babosa_do_campo": 0,
+                "capivara": 0,
+                "graxaim": 4,
+                "quero-quero": 0
+            },
+            "graxaim": {
+                "babosa_do_campo": 2,
+                "capivara": 0,
+                "graxaim": 11,
+                "quero-quero": 0
+            },
+            "quero-quero": {
+                "babosa_do_campo": 1,
+                "capivara": 0,
+                "graxaim": 3,
+                "quero-quero": 0
+            }
+        }
+    },
+    "cross_validation": null
+}

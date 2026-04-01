@@ -1,0 +1,4 @@
+/.idea
+/src/public/uploads
+/src/vendor/
+/src/app/Config/google-credentials.json

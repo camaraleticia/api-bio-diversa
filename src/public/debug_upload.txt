@@ -1,0 +1,13 @@
+Array
+(
+    [image] => Array
+        (
+            [name] => image.jpeg
+            [full_path] => image.jpeg
+            [type] => image/jpeg
+            [tmp_name] => /tmp/phpPCcOBf
+            [error] => 0
+            [size] => 7520
+        )
+
+)
