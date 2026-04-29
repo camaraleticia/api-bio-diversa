@@ -2,12 +2,12 @@ Array
 (
     [image] => Array
         (
-            [name] => image.jpeg
-            [full_path] => image.jpeg
+            [name] => capivara-01.jpg
+            [full_path] => capivara-01.jpg
             [type] => image/jpeg
-            [tmp_name] => /tmp/phpPCcOBf
+            [tmp_name] => /tmp/phpvmqa4vgdcljp2akhMAg
             [error] => 0
-            [size] => 7520
+            [size] => 475562
         )
 
 )

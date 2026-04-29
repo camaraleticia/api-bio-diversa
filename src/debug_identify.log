@@ -432,3 +432,17 @@ Array
         )
 
 )
+Iniciando identify()
+Array
+(
+    [image] => Array
+        (
+            [name] => capivara-01.jpg
+            [full_path] => capivara-01.jpg
+            [type] => image/jpeg
+            [tmp_name] => /tmp/phpvmqa4vgdcljp2akhMAg
+            [error] => 0
+            [size] => 475562
+        )
+
+)

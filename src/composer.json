@@ -1,5 +1,5 @@
 {
-  "name": "sorfabiosantos/api-bio-diversa",
+  "name": "camaraleticia/api-bio-diversa",
   "description": "Web Service com IA para Reconhecimento de Imagens das Espécies da Fauna e Flora dos Biomas da Região Carbonífera",
   "type": "project",
   "license": "MIT",
@@ -9,10 +9,10 @@
     }
   },
   "require": {
-    "php": ">=8.0",
+    "php": ">=8.4",
     "ext-gd": "*",
     "ext-json": "*",
-    "firebase/php-jwt": "v6.11.1",
+    "firebase/php-jwt": "v7.0.5",
     "phpoffice/phpspreadsheet": "^5.1",
     "rubix/ml": "^2.5"
   },

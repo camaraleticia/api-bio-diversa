@@ -272,3 +272,14 @@ Array
     [size] => 7520
 )
 Arquivo salvo em: /var/www/html/public/uploads/images/img_69cd531e9a64d0.08842289.jpeg
+Iniciando upload()
+Array
+(
+    [name] => capivara-01.jpg
+    [full_path] => capivara-01.jpg
+    [type] => image/jpeg
+    [tmp_name] => /tmp/phpvmqa4vgdcljp2akhMAg
+    [error] => 0
+    [size] => 475562
+)
+Arquivo salvo em: /var/www/html/public/uploads/images/img_69ef3c9512c167.79319306.jpg

@@ -1,5 +1,5 @@
 {
-    "timestamp": "2025-12-02T12:42:59+00:00",
+    "timestamp": "2026-04-29T22:16:26+00:00",
     "epochs": 25,
     "batch_size": 8,
     "kfold": null,
@@ -10,8 +10,8 @@
         "quero-quero"
     ],
     "test": {
-        "accuracy": 0.4444444444444444,
-        "macro_f1": 0.20277777777777778,
+        "accuracy": 0.4074074074074074,
+        "macro_f1": 0.19705882352941173,
         "per_class": {
             "babosa_do_campo": {
                 "precision": 0.25,
@@ -26,9 +26,9 @@
                 "support": 4
             },
             "graxaim": {
-                "precision": 0.4782608695652174,
-                "recall": 0.8461538461538461,
-                "f1": 0.6111111111111112,
+                "precision": 0.47619047619047616,
+                "recall": 0.7692307692307693,
+                "f1": 0.588235294117647,
                 "support": 13
             },
             "quero-quero": {
@@ -41,8 +41,8 @@
         "confusion_matrix": {
             "babosa_do_campo": {
                 "babosa_do_campo": 1,
-                "capivara": 0,
-                "graxaim": 5,
+                "capivara": 2,
+                "graxaim": 3,
                 "quero-quero": 0
             },
             "capivara": {
@@ -52,15 +52,15 @@
                 "quero-quero": 0
             },
             "graxaim": {
-                "babosa_do_campo": 2,
+                "babosa_do_campo": 3,
                 "capivara": 0,
-                "graxaim": 11,
+                "graxaim": 10,
                 "quero-quero": 0
             },
             "quero-quero": {
-                "babosa_do_campo": 1,
+                "babosa_do_campo": 0,
                 "capivara": 0,
-                "graxaim": 3,
+                "graxaim": 4,
                 "quero-quero": 0
             }
         }
