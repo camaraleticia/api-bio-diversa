@@ -93,16 +93,21 @@ try {
             echo "Processando imagens de $typeName/$speciesName...\n";
 
             // Processar cada imagem no diretório da espécie
+            // Nota: glob() é usado em vez de DirectoryIterator por compatibilidade
+            // com o filesystem virtual do Docker Desktop no Windows (VirtioFS/musl libc),
+            // onde DirectoryIterator retorna listagem truncada de diretórios com muitos arquivos.
             $imageCount = 0;
             $failedCount = 0;
-            foreach (new DirectoryIterator($speciesPath) as $file) {
-                if ($file->isDot() || !$file->isFile()) continue;
+            $imagePaths = array_merge(
+                glob($speciesPath . '/*.jpg') ?: [],
+                glob($speciesPath . '/*.jpeg') ?: [],
+                glob($speciesPath . '/*.png') ?: [],
+                glob($speciesPath . '/*.JPG') ?: [],
+                glob($speciesPath . '/*.JPEG') ?: [],
+                glob($speciesPath . '/*.PNG') ?: []
+            );
 
-                $extension = strtolower(pathinfo($file->getFilename(), PATHINFO_EXTENSION));
-                if (!in_array($extension, ['jpg', 'jpeg', 'png'])) continue;
-
-                $imagePath = $file->getPathname();
-
+            foreach ($imagePaths as $imagePath) {
                 // Processar a imagem e extrair características
                 $vector = preprocessImage($imagePath);
 

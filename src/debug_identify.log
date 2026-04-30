@@ -754,3 +754,59 @@ Array
         )
 
 )
+Iniciando identify()
+Array
+(
+    [image] => Array
+        (
+            [name] => capivara-01.jpg
+            [full_path] => capivara-01.jpg
+            [type] => image/jpeg
+            [tmp_name] => /tmp/phpvl0oagfg8hjf0oJkPCf
+            [error] => 0
+            [size] => 475562
+        )
+
+)
+Iniciando identify()
+Array
+(
+    [image] => Array
+        (
+            [name] => capivara-01.jpg
+            [full_path] => capivara-01.jpg
+            [type] => image/jpeg
+            [tmp_name] => /tmp/phpmb8t38t34mci9odDCjL
+            [error] => 0
+            [size] => 475562
+        )
+
+)
+Iniciando identify()
+Array
+(
+    [image] => Array
+        (
+            [name] => graxain.jpg
+            [full_path] => graxain.jpg
+            [type] => image/jpeg
+            [tmp_name] => /tmp/phpa8u51g3t6cbi1KfFNfp
+            [error] => 0
+            [size] => 200598
+        )
+
+)
+Iniciando identify()
+Array
+(
+    [image] => Array
+        (
+            [name] => quero.jpg
+            [full_path] => quero.jpg
+            [type] => image/jpeg
+            [tmp_name] => /tmp/phpos5tlkan558e1injdOk
+            [error] => 0
+            [size] => 6504
+        )
+
+)
