@@ -157,38 +157,62 @@ class RubixMLClassificationService
     }
 
     /**
-     * Pré-processa a imagem para classificação
-     * (deve ser idêntico ao usado no treinamento: 224x224 RGB normalizado)
+     * Pré-processa a imagem para classificação.
+     * ATENÇÃO: este pipeline deve ser IDÊNTICO ao de train_model.php::preprocessImage().
+     * Qualquer divergência reduz a acurácia na inferência.
      *
      * @param string $imagePath Caminho para a imagem
-     * @return array Vetor de características da imagem
+     * @return array Vetor de 256 features (16×16 grayscale normalizado)
      */
     private function preprocessImage(string $imagePath): array
     {
-        $size = 16; // consistente com novo pipeline
-        $raw = @file_get_contents($imagePath);
+        $size = 16; // 16x16 => 256 features (grayscale)
+
+        $raw = file_get_contents($imagePath);
         if ($raw === false) {
             throw new \RuntimeException('Falha ao ler a imagem.');
         }
+
         $im = @imagecreatefromstring($raw);
         if (!$im) {
             throw new \RuntimeException('Formato de imagem inválido ou corrompido.');
         }
+
         $res = imagecreatetruecolor($size, $size);
-        imagecopyresampled($res, $im, 0,0,0,0, $size,$size, imagesx($im), imagesy($im));
+        if (!$res) {
+            imagedestroy($im);
+            throw new \RuntimeException('Falha ao alocar canvas de redimensionamento.');
+        }
+
+        // Suporte a PNG com canal alpha: fundo branco antes de compor
+        imagealphablending($res, false);
+        imagesavealpha($res, true);
+        $white = imagecolorallocate($res, 255, 255, 255);
+        imagefilledrectangle($res, 0, 0, $size, $size, $white);
+        imagealphablending($res, true);
+
+        imagecopyresampled($res, $im, 0, 0, 0, 0, $size, $size, imagesx($im), imagesy($im));
+
         $vec = [];
-        for ($y=0;$y<$size;$y++) {
-            for ($x=0;$x<$size;$x++) {
-                $rgb = imagecolorat($res,$x,$y);
-                $r = ($rgb>>16)&0xFF; $g = ($rgb>>8)&0xFF; $b = $rgb & 0xFF;
-                $gray = (0.299*$r + 0.587*$g + 0.114*$b)/255.0;
+        for ($y = 0; $y < $size; $y++) {
+            for ($x = 0; $x < $size; $x++) {
+                $rgb = imagecolorat($res, $x, $y);
+                $r = ($rgb >> 16) & 0xFF;
+                $g = ($rgb >> 8) & 0xFF;
+                $b = $rgb & 0xFF;
+                // Conversão para escala de cinza e normalização [0, 1]
+                $gray = (0.299 * $r + 0.587 * $g + 0.114 * $b) / 255.0;
                 $vec[] = $gray;
             }
         }
-        imagedestroy($im); imagedestroy($res);
-        if (count($vec) !== 256) {
-            throw new \RuntimeException('Dimensão inesperada do vetor de imagem.');
+
+        imagedestroy($im);
+        imagedestroy($res);
+
+        if (count($vec) !== ($size * $size)) {
+            throw new \RuntimeException('Dimensão inesperada do vetor de imagem: ' . count($vec) . ' features.');
         }
+
         return $vec;
     }
 

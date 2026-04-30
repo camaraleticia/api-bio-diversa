@@ -88,15 +88,37 @@ Para adicionar uma nova espécie, basta criar a subpasta correspondente (ex.: `f
 
 Cada imagem passa pelo seguinte pipeline antes de entrar no modelo:
 
-1. Leitura via `imagecreatefromstring()` (extensão GD)
-2. Redimensionamento para **16×16 pixels**
-3. Conversão para **escala de cinza** (fórmula: `0.299·R + 0.587·G + 0.114·B`)
-4. Normalização para intervalo `[0, 1]`
-5. Resultado: vetor de **256 features** por imagem
+1. Leitura via `file_get_contents()` + `imagecreatefromstring()` (extensão GD)
+2. Fundo branco aplicado ao canvas antes do redimensionamento (suporte a PNG com alpha)
+3. Redimensionamento para **16×16 pixels** via `imagecopyresampled()`
+4. Conversão para **escala de cinza** (fórmula: `0.299·R + 0.587·G + 0.114·B`)
+5. Normalização para intervalo `[0, 1]`
+6. Validação de dimensão: o vetor deve ter exatamente **256 features**
+7. Resultado: vetor de **256 features** por imagem
 
 O pipeline de transformação do RubixML aplica `ZScaleStandardizer` para padronizar as features durante o treinamento e a inferência.
 
-> **Atenção:** o pré-processamento na inferência (`RubixMLClassificationService::preprocessImage`) deve ser **idêntico** ao usado no treinamento (`train_model.php::preprocessImage()`). Qualquer divergência reduz drasticamente a acurácia.
+### Restrições e requisitos
+
+| Item | Regra |
+|------|-------|
+| Formatos aceitos | `.jpg`, `.jpeg`, `.png` (case-insensitive) |
+| Imagens PNG com alpha | Compostas sobre fundo **branco** antes do redimensionamento |
+| Imagens corrompidas | Descartadas com aviso — não interrompem o treinamento |
+| Dimensão mínima | Qualquer tamanho (redimensionado para 16×16) |
+| Canais de cor | RGB ou RGBA — convertidos para grayscale |
+
+> **Atenção crítica:** o pré-processamento na inferência (`RubixMLClassificationService::preprocessImage`) deve ser **idêntico** ao usado no treinamento (`train_model.php::preprocessImage()`). O pipeline foi sincronizado — qualquer alteração futura em um deve ser replicada no outro imediatamente.
+
+### Balanceamento de classes
+
+O dataset deve ter número **equilibrado de imagens por espécie**. Classes com mais amostras tendem a dominar as predições, reduzindo a acurácia nas demais.
+
+| Espécie | Imagens recomendadas |
+|---------|---------------------|
+| Todas as classes | ~70 imagens (limite operacional atual) |
+
+> Com 70 imagens por classe e resolução 16×16 grayscale, a acurácia será moderada mas funcionalmente válida. O modelo melhora progressivamente à medida que o dataset cresce com novas submissões da plataforma.
 
 ---
 

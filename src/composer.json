@@ -12,6 +12,7 @@
     "php": ">=8.4",
     "ext-gd": "*",
     "ext-json": "*",
+    "ext-zlib": "*",
     "firebase/php-jwt": "v7.0.5",
     "phpoffice/phpspreadsheet": "^5.1",
     "rubix/ml": "^2.5"
