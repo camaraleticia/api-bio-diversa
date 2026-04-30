@@ -756,3 +756,25 @@ Array
     [size] => 6504
 )
 Arquivo salvo em: /var/www/html/public/uploads/images/img_69f333d2653294.34354549.jpg
+Iniciando upload()
+Array
+(
+    [name] => quero-03.jpg
+    [full_path] => quero-03.jpg
+    [type] => image/jpeg
+    [tmp_name] => /tmp/php4oabl6rs2hma4bAmOKm
+    [error] => 0
+    [size] => 11061
+)
+Arquivo salvo em: /var/www/html/public/uploads/images/img_69f33439477fa0.75266824.jpg
+Iniciando upload()
+Array
+(
+    [name] => capivara-03.jpg
+    [full_path] => capivara-03.jpg
+    [type] => image/jpeg
+    [tmp_name] => /tmp/php0c6l0v6vv9jd0IdIDCK
+    [error] => 0
+    [size] => 8449
+)
+Arquivo salvo em: /var/www/html/public/uploads/images/img_69f334a9b5bfb4.76130548.jpg
