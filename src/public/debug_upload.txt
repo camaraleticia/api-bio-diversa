@@ -2,12 +2,12 @@ Array
 (
     [image] => Array
         (
-            [name] => quero.jpg
-            [full_path] => quero.jpg
+            [name] => bugio.jpg
+            [full_path] => bugio.jpg
             [type] => image/jpeg
-            [tmp_name] => /tmp/phpos5tlkan558e1injdOk
+            [tmp_name] => /tmp/phprgdjpj5cdhii0lACJPN
             [error] => 0
-            [size] => 6504
+            [size] => 20064
         )
 
 )
