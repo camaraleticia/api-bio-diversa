@@ -712,3 +712,45 @@ Array
         )
 
 )
+Iniciando identify()
+Array
+(
+    [image] => Array
+        (
+            [name] => quero02.jpg
+            [full_path] => quero02.jpg
+            [type] => image/jpeg
+            [tmp_name] => /tmp/phpud2fe1u50a7laBgfKMb
+            [error] => 0
+            [size] => 8020
+        )
+
+)
+Iniciando identify()
+Array
+(
+    [image] => Array
+        (
+            [name] => capivara-01.jpg
+            [full_path] => capivara-01.jpg
+            [type] => image/jpeg
+            [tmp_name] => /tmp/phpfblqbnshga5daLadBEl
+            [error] => 0
+            [size] => 475562
+        )
+
+)
+Iniciando identify()
+Array
+(
+    [image] => Array
+        (
+            [name] => graxain.jpg
+            [full_path] => graxain.jpg
+            [type] => image/jpeg
+            [tmp_name] => /tmp/php9045o2tm43ku9ahNahC
+            [error] => 0
+            [size] => 200598
+        )
+
+)

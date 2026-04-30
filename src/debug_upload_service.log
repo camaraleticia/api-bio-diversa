@@ -492,3 +492,36 @@ Array
     [size] => 8020
 )
 Arquivo salvo em: /var/www/html/public/uploads/images/img_69f321589678b9.31434099.jpg
+Iniciando upload()
+Array
+(
+    [name] => quero02.jpg
+    [full_path] => quero02.jpg
+    [type] => image/jpeg
+    [tmp_name] => /tmp/phpud2fe1u50a7laBgfKMb
+    [error] => 0
+    [size] => 8020
+)
+Arquivo salvo em: /var/www/html/public/uploads/images/img_69f324f00a0fb5.96598214.jpg
+Iniciando upload()
+Array
+(
+    [name] => capivara-01.jpg
+    [full_path] => capivara-01.jpg
+    [type] => image/jpeg
+    [tmp_name] => /tmp/phpfblqbnshga5daLadBEl
+    [error] => 0
+    [size] => 475562
+)
+Arquivo salvo em: /var/www/html/public/uploads/images/img_69f324f93c6b95.70764933.jpg
+Iniciando upload()
+Array
+(
+    [name] => graxain.jpg
+    [full_path] => graxain.jpg
+    [type] => image/jpeg
+    [tmp_name] => /tmp/php9045o2tm43ku9ahNahC
+    [error] => 0
+    [size] => 200598
+)
+Arquivo salvo em: /var/www/html/public/uploads/images/img_69f325087e7192.56273896.jpg

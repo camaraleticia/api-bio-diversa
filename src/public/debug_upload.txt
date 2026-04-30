@@ -2,12 +2,12 @@ Array
 (
     [image] => Array
         (
-            [name] => quero02.jpg
-            [full_path] => quero02.jpg
+            [name] => graxain.jpg
+            [full_path] => graxain.jpg
             [type] => image/jpeg
-            [tmp_name] => /tmp/phplrurrif5116fbhLEOEG
+            [tmp_name] => /tmp/php9045o2tm43ku9ahNahC
             [error] => 0
-            [size] => 8020
+            [size] => 200598
         )
 
 )
