@@ -197,7 +197,8 @@ api-bio-diversa/
     "image_url": "/uploads/images/img_yyy.jpeg",
     "confidence": 0.41,
     "status": "pending_validation",
-    "message": "Identificação requer análise de especialista"
+    "message": "Identificação requer análise de especialista",
+    "suggestion": "Capivara"
   }
   ```
 

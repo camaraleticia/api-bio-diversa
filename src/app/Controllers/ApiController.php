@@ -52,19 +52,11 @@ class ApiController extends Controller
      */
     public function identify()
     {
-
-        file_put_contents('debug_upload.txt', print_r($_FILES, true));
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $this->json(['error' => 'Método não permitido'], 405);
         }
 
         try {
-
-             // --- DEBUG INÍCIO ---
-        file_put_contents(__DIR__ . '/../../debug_identify.log', "Iniciando identify()\n", FILE_APPEND);
-        file_put_contents(__DIR__ . '/../../debug_identify.log', print_r($_FILES, true), FILE_APPEND);
-        // --- DEBUG FIM ---
-        
             if (!isset($_FILES['image']) || empty($_FILES['image']['name'])) {
                 $this->json(['error' => 'Nenhuma imagem enviada'], 400);
             }
@@ -104,6 +96,9 @@ class ApiController extends Controller
             } else {
                 $response['status'] = 'pending_validation';
                 $response['message'] = 'Identificação requer análise de especialista';
+                if (!empty($classificationResult['species'])) {
+                    $response['suggestion'] = $classificationResult['species'];
+                }
             }
 
             $this->json($response);

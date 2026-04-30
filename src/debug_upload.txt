@@ -272,3 +272,19 @@ Executando comando:
 php '/var/www/html/app/ML/classify_image.php' --image='/var/www/html/public/uploads/images/img_69f332ece2e476.07172095.jpg' --model='/var/www/html/app/ML/models/species_classifier.rbx' --json
 Saída:
 {"species":"Graxaim (Lycalopex gymnocercus)","confidence":0.5609}
+Executando comando:
+php '/var/www/html/app/ML/classify_image.php' --image='/var/www/html/public/uploads/images/img_69f333b7614725.70404667.jpg' --model='/var/www/html/app/ML/models/species_classifier.rbx' --json
+Saída:
+{"species":"Capivara (Hydrochoerus hydrochaeris)","confidence":1}
+Executando comando:
+php '/var/www/html/app/ML/classify_image.php' --image='/var/www/html/public/uploads/images/img_69f333bda364b0.78073885.jpg' --model='/var/www/html/app/ML/models/species_classifier.rbx' --json
+Saída:
+{"species":"Quero-quero (Vanellus chilensis)","confidence":1}
+Executando comando:
+php '/var/www/html/app/ML/classify_image.php' --image='/var/www/html/public/uploads/images/img_69f333c3c09ee7.95060010.jpg' --model='/var/www/html/app/ML/models/species_classifier.rbx' --json
+Saída:
+{"species":"Graxaim (Lycalopex gymnocercus)","confidence":0.5609}
+Executando comando:
+php '/var/www/html/app/ML/classify_image.php' --image='/var/www/html/public/uploads/images/img_69f333d2653294.34354549.jpg' --model='/var/www/html/app/ML/models/species_classifier.rbx' --json
+Saída:
+{"species":"Quero-quero (Vanellus chilensis)","confidence":1}

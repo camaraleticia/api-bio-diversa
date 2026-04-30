@@ -712,3 +712,47 @@ Array
     [size] => 20064
 )
 Arquivo salvo em: /var/www/html/public/uploads/images/img_69f332ece2e476.07172095.jpg
+Iniciando upload()
+Array
+(
+    [name] => capivara-02.jpg
+    [full_path] => capivara-02.jpg
+    [type] => image/jpeg
+    [tmp_name] => /tmp/php6hvstmd4dtnh3GIMimp
+    [error] => 0
+    [size] => 10749
+)
+Arquivo salvo em: /var/www/html/public/uploads/images/img_69f333b7614725.70404667.jpg
+Iniciando upload()
+Array
+(
+    [name] => quero.jpg
+    [full_path] => quero.jpg
+    [type] => image/jpeg
+    [tmp_name] => /tmp/php86cqhbsp9qcp8jBELnH
+    [error] => 0
+    [size] => 6504
+)
+Arquivo salvo em: /var/www/html/public/uploads/images/img_69f333bda364b0.78073885.jpg
+Iniciando upload()
+Array
+(
+    [name] => bugio.jpg
+    [full_path] => bugio.jpg
+    [type] => image/jpeg
+    [tmp_name] => /tmp/phpmm3hv016obi92HPchOL
+    [error] => 0
+    [size] => 20064
+)
+Arquivo salvo em: /var/www/html/public/uploads/images/img_69f333c3c09ee7.95060010.jpg
+Iniciando upload()
+Array
+(
+    [name] => quero.jpg
+    [full_path] => quero.jpg
+    [type] => image/jpeg
+    [tmp_name] => /tmp/phpq9qb0hh2jajm2cmePaA
+    [error] => 0
+    [size] => 6504
+)
+Arquivo salvo em: /var/www/html/public/uploads/images/img_69f333d2653294.34354549.jpg

@@ -78,6 +78,10 @@ function displayResult(data) {
 
     } else if (data.status === "pending_validation") {
 
+        const suggestionHtml = data.suggestion
+            ? `<p>Sugestão da IA: <strong>${data.suggestion}</strong> <em>(não confirmado)</em></p>`
+            : "";
+
         resultHTML = `
             <div class="result-card">
                 <h4>Identificação pendente</h4>
@@ -88,6 +92,8 @@ function displayResult(data) {
                         ${(data.confidence * 100).toFixed(2)}%
                     </span>
                 </p>
+
+                ${suggestionHtml}
 
                 <p>A imagem será analisada por especialistas.</p>
 
