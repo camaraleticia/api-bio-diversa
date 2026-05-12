@@ -98,12 +98,16 @@ try {
                 if ($file->isDot() || !$file->isFile()) continue;
 
                 $extension = strtolower(pathinfo($file->getFilename(), PATHINFO_EXTENSION));
-                if (!in_array($extension, ['jpg', 'jpeg', 'png'])) continue;
+                if (!in_array($extension, ['jpg', 'jpeg', 'png', 'JPG', 'JPEG', 'PNG'])) continue;
 
                 $imagePath = $file->getPathname();
 
                 // Processar a imagem e extrair características
                 $vector = preprocessImage($imagePath);
+
+                if (!$vector){
+                    echo "Imagem ignorada: $imagePath\n";
+                }
 
                 if ($vector) {
                     $samples[] = $vector;
@@ -173,7 +177,7 @@ try {
     echo "Conjunto de teste: " . $testing->numSamples() . " amostras\n\n";
 
     // Criar e configurar o estimador (rede neural) - reduzido para input 16x16 (256 features)
-    echo "Configurando modelo de rede neural leve (16x16 grayscale)...\n";
+    echo "Configurando modelo de rede neural leve (32x32 grayscale)...\n";
     $estimator = new MultilayerPerceptron([
         new Dense(128),
         new Activation(new LeakyReLU()),
@@ -358,7 +362,7 @@ function preprocessImage(string $imagePath)
         }
 
         // Novo tamanho reduzido para compactar dimensionalidade
-        $size = 16; // 16x16 => 256 features (grayscale)
+        $size = 32; // 16x16 => 256 features (grayscale) - MODIFICADO PARA 32 EM 02/04
         $resized = imagecreatetruecolor($size, $size);
         imagecopyresampled(
             $resized,

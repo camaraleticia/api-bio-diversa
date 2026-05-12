@@ -22,12 +22,16 @@ class DataPreprocessor
             foreach (glob($typeDir . "/*", GLOB_ONLYDIR) as $speciesDir) {
                 $species = basename($speciesDir);
 
-                foreach (glob($speciesDir . "/*.{jpg,jpeg,png}", GLOB_BRACE) as $imagePath) {
+                foreach (glob($speciesDir . "/*.{jpg,jpeg,png,JPG,JPEG,PNG}", GLOB_BRACE) as $imagePath) {
                     // Carregar imagem
                     $image = imagecreatefromstring(file_get_contents($imagePath));
+                    if (!$image){ // adicionado em 01/04
+                        echo "Imagem ignorada: $imagePath \n";
+                        continue;
+                    }
 
                     // Aplicar transformações básicas
-                    $resizer = new ImageResizer(16, 16); // atualizado para 16x16
+                    $resizer = new ImageResizer(32, 32); // atualizado para 32
                     $image = $resizer->transform([$image])[0];
 
                     // Adicionar à lista de amostras
