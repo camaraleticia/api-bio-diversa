@@ -2,12 +2,12 @@ Array
 (
     [image] => Array
         (
-            [name] => capivara_016.jpg
-            [full_path] => capivara_016.jpg
+            [name] => bugio.jpg
+            [full_path] => bugio.jpg
             [type] => image/jpeg
-            [tmp_name] => /tmp/phpAcFoDk
+            [tmp_name] => /tmp/phprgdjpj5cdhii0lACJPN
             [error] => 0
-            [size] => 25777
+            [size] => 20064
         )
 
 )

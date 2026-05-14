@@ -27,6 +27,10 @@ RUN docker-php-ext-install \
     pcntl \
     gd
 
+# Configurações de memória e tempo para scripts CLI (ex: treinamento do modelo)
+RUN echo "memory_limit = 512M" > /usr/local/etc/php/conf.d/zz-custom.ini \
+ && echo "max_execution_time = 0" >> /usr/local/etc/php/conf.d/zz-custom.ini
+
 # Instalar Composer (copia o binário oficial)
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 

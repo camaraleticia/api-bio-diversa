@@ -93,30 +93,35 @@ try {
             echo "Processando imagens de $typeName/$speciesName...\n";
 
             // Processar cada imagem no diretório da espécie
+            // Nota: glob() é usado em vez de DirectoryIterator por compatibilidade
+            // com o filesystem virtual do Docker Desktop no Windows (VirtioFS/musl libc),
+            // onde DirectoryIterator retorna listagem truncada de diretórios com muitos arquivos.
             $imageCount = 0;
-            foreach (new DirectoryIterator($speciesPath) as $file) {
-                if ($file->isDot() || !$file->isFile()) continue;
+            $failedCount = 0;
+            $imagePaths = array_merge(
+                glob($speciesPath . '/*.jpg') ?: [],
+                glob($speciesPath . '/*.jpeg') ?: [],
+                glob($speciesPath . '/*.png') ?: [],
+                glob($speciesPath . '/*.JPG') ?: [],
+                glob($speciesPath . '/*.JPEG') ?: [],
+                glob($speciesPath . '/*.PNG') ?: []
+            );
 
-                $extension = strtolower(pathinfo($file->getFilename(), PATHINFO_EXTENSION));
-                if (!in_array($extension, ['jpg', 'jpeg', 'png', 'JPG', 'JPEG', 'PNG'])) continue;
-
-                $imagePath = $file->getPathname();
-
+            foreach ($imagePaths as $imagePath) {
                 // Processar a imagem e extrair características
                 $vector = preprocessImage($imagePath);
 
-                if (!$vector){
-                    echo "Imagem ignorada: $imagePath\n";
-                }
-
-                if ($vector) {
+                if ($vector !== null) {
                     $samples[] = $vector;
                     $labels[] = $speciesName;
                     $imageCount++;
+                } else {
+                    $failedCount++;
                 }
             }
 
-            echo "  - $imageCount imagens processadas\n";
+            $falhaMsg = $failedCount > 0 ? " | \033[33m$failedCount falhas\033[0m" : '';
+            echo "  - $imageCount imagens carregadas{$falhaMsg}\n";
         }
     }
 
@@ -344,26 +349,44 @@ try {
 }
 
 /**
- * Pré-processa uma imagem para extração de características
+ * Pré-processa uma imagem para extração de características.
+ * ATENÇÃO: este pipeline deve ser IDÊNTICO ao de RubixMLClassificationService::preprocessImage().
+ * Qualquer divergência reduz a acurácia na inferência.
  *
  * @param string $imagePath Caminho para a imagem
- * @return array|null Vetor de características ou null em caso de erro
+ * @return array|null Vetor de 256 features (16×16 grayscale normalizado) ou null em caso de erro
  */
-function preprocessImage(string $imagePath)
+function preprocessImage(string $imagePath): ?array
 {
     try {
-        $imageData = @file_get_contents($imagePath);
+        $imageData = file_get_contents($imagePath);
         if ($imageData === false) {
-            return null;
-        }
-        $image = @imagecreatefromstring($imageData);
-        if (!$image) {
+            echo "  [AVISO] Falha ao ler arquivo: $imagePath\n";
             return null;
         }
 
-        // Novo tamanho reduzido para compactar dimensionalidade
-        $size = 32; // 16x16 => 256 features (grayscale) - MODIFICADO PARA 32 EM 02/04
+        $image = @imagecreatefromstring($imageData);
+        if (!$image) {
+            echo "  [AVISO] Formato inválido ou corrompido: $imagePath\n";
+            return null;
+        }
+
+        $size = 16; // 16x16 => 256 features (grayscale)
+
         $resized = imagecreatetruecolor($size, $size);
+        if (!$resized) {
+            imagedestroy($image);
+            echo "  [AVISO] Falha ao alocar canvas de redimensionamento: $imagePath\n";
+            return null;
+        }
+
+        // Suporte a PNG com canal alpha: fundo branco antes de compor
+        imagealphablending($resized, false);
+        imagesavealpha($resized, true);
+        $white = imagecolorallocate($resized, 255, 255, 255);
+        imagefilledrectangle($resized, 0, 0, $size, $size, $white);
+        imagealphablending($resized, true);
+
         imagecopyresampled(
             $resized,
             $image,
@@ -380,7 +403,7 @@ function preprocessImage(string $imagePath)
                 $r = ($rgb >> 16) & 0xFF;
                 $g = ($rgb >> 8) & 0xFF;
                 $b = $rgb & 0xFF;
-                // conversão para escala de cinza e normalização
+                // Conversão para escala de cinza e normalização [0, 1]
                 $gray = (0.299 * $r + 0.587 * $g + 0.114 * $b) / 255.0;
                 $vector[] = $gray;
             }
@@ -389,9 +412,16 @@ function preprocessImage(string $imagePath)
         imagedestroy($image);
         imagedestroy($resized);
 
+        // Validação da dimensão — deve ser sempre $size * $size
+        if (count($vector) !== ($size * $size)) {
+            echo "  [AVISO] Dimensão inesperada do vetor (" . count($vector) . " features): $imagePath\n";
+            return null;
+        }
+
         return $vector;
+
     } catch (\Throwable $e) {
-        echo "Erro ao processar imagem $imagePath: " . $e->getMessage() . "\n";
+        echo "  [ERRO] Falha ao processar imagem $imagePath: " . $e->getMessage() . "\n";
         return null;
     }
 }
