@@ -182,7 +182,22 @@ Imagens salvas em `public/uploads/images/` com nome gerado por `uniqid('img_', t
   6. Serialização do modelo em `.rbx` e `.rbx.gz` (gzip)
   7. Geração de relatório `training_report.json` e `training_report.xlsx`
 
-  Parâmetros recomendados com dataset atual:
+  Parâmetros disponíveis no script de treinamento:
+
+  | Parâmetro | Padrão | Descrição |
+  |-----------|--------|-----------|
+  | `--epochs=N` | `100` | Número de épocas de treinamento |
+  | `--batch=N` | `32` | Tamanho do mini-batch |
+  | `--kfold=N` | desativado | Ativa K-Fold Cross Validation com N folds |
+  | `--output=path` | `app/ML/models/species_classifier.rbx` | Caminho de saída do modelo |
+  | `--grayscale` | não definido (RGB) | Quando informado, converte imagens para escala de cinza (256 features); quando omitido, utiliza canais RGB completos (768 features) |
+
+  Parâmetros recomendados com dataset atual em escala de cinza:
+  ```bash
+  docker exec carbonifera_php php app/ML/train_model.php --epochs=300 --batch=16 --kfold=5 --grayscale
+  ```
+
+  Parâmetros recomendados com dataset atual em RGB (cores):
   ```bash
   docker exec carbonifera_php php app/ML/train_model.php --epochs=300 --batch=16 --kfold=5
   ```
@@ -204,13 +219,14 @@ Imagens salvas em `public/uploads/images/` com nome gerado por `uniqid('img_', t
       └── babosa_do_campo/ (sem imagens de treino ainda)
   ```
 
-- **Pré-processamento** (idêntico em treinamento e inferência):
+- **Pré-processamento** (idêntico em treinamento e inferência, modo detectado automaticamente via `training_report.json`):
   1. Leitura do arquivo via `file_get_contents()` + `imagecreatefromstring()` (extensão GD)
   2. Criação de canvas `imagecreatetruecolor(16, 16)` com fundo branco (suporte a PNG com transparência)
   3. Redimensionamento para 16×16 pixels via `imagecopyresampled()`
-  4. Conversão para escala de cinza: `gray = (0.299·R + 0.587·G + 0.114·B) / 255`
-  5. Resultado: vetor de **256 features** normalizadas no intervalo `[0, 1]`
-  6. Validação: `count($vec) !== 256` → descarte da amostra com log de aviso
+  4. **Modo escala de cinza** (`--grayscale`): luminância ponderada `gray = (0.299·R + 0.587·G + 0.114·B) / 255` → vetor de **256 features**
+  5. **Modo RGB** (padrão, sem `--grayscale`): canais separados `R/255`, `G/255`, `B/255` por pixel → vetor de **768 features**; dropout aumentado de 0.2 para 0.4 para compensar maior dimensionalidade com dataset pequeno
+  6. Validação: `count($vec) !== esperado` → descarte da amostra com log de aviso
+  7. O modo utilizado no treinamento é registrado em `training_report.json` (`color_mode`: `"grayscale"` ou `"rgb"`, `features_per_sample`: `256` ou `768`). Na inferência, `RubixMLClassificationService` lê esse arquivo e sincroniza automaticamente o pré-processamento — sem necessidade de configuração manual
 
 - **Salvamento do modelo:**
   - Formato primário: `app/ML/models/species_classifier.rbx` (RubixML `PersistentModel` + `Filesystem`)

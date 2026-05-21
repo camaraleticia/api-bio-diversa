@@ -32,6 +32,13 @@ class RubixMLClassificationService
     private array $speciesMapping = [];
 
     /**
+     * Modo de cor: true = grayscale (256 features) | false = RGB (768 features)
+     * Lido automaticamente do training_report.json para garantir consistência com o treino.
+     * @var bool
+     */
+    private bool $grayscale = true; // padrão seguro: grayscale
+
+    /**
      * Cache estático do modelo para evitar recarregar por requisição
      * @var mixed
      */
@@ -43,12 +50,21 @@ class RubixMLClassificationService
     public function __construct()
     {
         $config = require ROOT_DIR . '/app/Config/config.php';
-    $this->config = $config['ai_service'] ?? [];
-    // Preferir modelo comprimido se existir
-    $defaultBase = ROOT_DIR . '/app/ML/models/species_classifier.rbx';
-    $gzCandidate = $defaultBase . '.gz';
-    $chosen = file_exists($gzCandidate) ? $gzCandidate : $defaultBase;
-    $this->modelPath = $this->config['model_path'] ?? $chosen;
+        $this->config = $config['ai_service'] ?? [];
+
+        // Preferir modelo comprimido se existir
+        $defaultBase  = ROOT_DIR . '/app/ML/models/species_classifier.rbx';
+        $gzCandidate  = $defaultBase . '.gz';
+        $chosen       = file_exists($gzCandidate) ? $gzCandidate : $defaultBase;
+        $this->modelPath = $this->config['model_path'] ?? $chosen;
+
+        // Detectar modo de cor do training_report.json gerado pelo script de treinamento.
+        // Garante que o pré-processamento na inferência seja idêntico ao do treino.
+        $reportPath = ROOT_DIR . '/app/ML/models/training_report.json';
+        if (file_exists($reportPath)) {
+            $report = json_decode(file_get_contents($reportPath), true);
+            $this->grayscale = ($report['color_mode'] ?? 'grayscale') === 'grayscale';
+        }
 
         // Mapeamento de espécies para o modelo (ajuste do rótulo "quero-quero")
         $this->speciesMapping = [
@@ -90,7 +106,7 @@ class RubixMLClassificationService
             }
 
             // Preparar a imagem para classificação
-            $image = $this->preprocessImage($imagePath);
+            $image = $this->preprocessImage($imagePath, $this->grayscale);
 
             // Realizar a predição
             $inference = new Unlabeled([ $image ]);
@@ -162,9 +178,10 @@ class RubixMLClassificationService
      * Qualquer divergência reduz a acurácia na inferência.
      *
      * @param string $imagePath Caminho para a imagem
-     * @return array Vetor de 256 features (16×16 grayscale normalizado)
+     * @param bool   $grayscale true = escala de cinza (256 features) | false = RGB (768 features)
+     * @return array Vetor de features normalizado
      */
-    private function preprocessImage(string $imagePath): array
+    private function preprocessImage(string $imagePath, bool $grayscale = true): array
     {
         $size = 16; // 16x16 => 256 features (grayscale)
 
@@ -200,17 +217,27 @@ class RubixMLClassificationService
                 $r = ($rgb >> 16) & 0xFF;
                 $g = ($rgb >> 8) & 0xFF;
                 $b = $rgb & 0xFF;
-                // Conversão para escala de cinza e normalização [0, 1]
-                $gray = (0.299 * $r + 0.587 * $g + 0.114 * $b) / 255.0;
-                $vec[] = $gray;
+
+                if ($grayscale) {
+                    // Luminância ponderada — 1 feature por pixel
+                    $vec[] = (0.299 * $r + 0.587 * $g + 0.114 * $b) / 255.0;
+                } else {
+                    // RGB normalizado — 3 features por pixel
+                    $vec[] = $r / 255.0;
+                    $vec[] = $g / 255.0;
+                    $vec[] = $b / 255.0;
+                }
             }
         }
 
         imagedestroy($im);
         imagedestroy($res);
 
-        if (count($vec) !== ($size * $size)) {
-            throw new \RuntimeException('Dimensão inesperada do vetor de imagem: ' . count($vec) . ' features.');
+        $expectedSize = $size * $size * ($grayscale ? 1 : 3);
+        if (count($vec) !== $expectedSize) {
+            throw new \RuntimeException(
+                'Dimensão inesperada: ' . count($vec) . " features (esperado {$expectedSize})."
+            );
         }
 
         return $vec;
