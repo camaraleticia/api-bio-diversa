@@ -61,15 +61,15 @@ function displayResult(data) {
         resultHTML = `
             <div class="result-card">
                 <h4>Identificação bem-sucedida!</h4>
-                <p>Espécie identificada: <strong>${data.species}</strong></p>
+                <p>Espécie identificada: <strong>${data.data.classification.species}</strong></p>
                 <p>Confiança: 
                     <span class="confidence success">
-                        ${(data.confidence * 100).toFixed(2)}%
+                        ${data.data.classification.confidence}%
                     </span>
                 </p>
 
                 <div class="result-image">
-                    <img src="${data.image_url}" 
+                    <img src="http://localhost:8080${data.data.image.url}"  
                     alt="Imagem enviada"
                     style="max-width:100%;max-height:300px;">
                 </div>
@@ -89,7 +89,7 @@ function displayResult(data) {
 
                 <p>Confiança:
                     <span class="confidence pending">
-                        ${(data.confidence * 100).toFixed(2)}%
+                       ${data.data.classification.confidence}%
                     </span>
                 </p>
 
@@ -98,7 +98,7 @@ function displayResult(data) {
                 <p>A imagem será analisada por especialistas.</p>
 
                 <div class="result-image">
-                    <img src="${data.image_url}" 
+                    <img src="http://localhost:8080${data.data.image.url}"  
                     alt="Imagem enviada"
                     style="max-width:100%;max-height:300px;">
                 </div>

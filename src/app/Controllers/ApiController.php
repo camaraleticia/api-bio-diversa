@@ -71,7 +71,7 @@ class ApiController extends Controller
             // Preparar dados para salvar
             $identificationData = [
                 'image_path' => $uploadResult['url'],
-                'confidence' => $classificationResult['confidence'],
+                'confidence' => $classificationResult['confidence'] * 100,
                 'status' => $isConfident ? 'success' : 'pending_validation'
             ];
 
@@ -84,7 +84,7 @@ class ApiController extends Controller
 
             $identificationId = $this->identificationModel->create($identificationData);
 
-            $response = [
+/*             $response = [
                 'identification_id' => $identificationId,
                 'image_url' => $uploadResult['url'],
                 'confidence' => $classificationResult['confidence'],
@@ -102,6 +102,57 @@ class ApiController extends Controller
             }
 
             $this->json($response);
+ */
+
+            $response = [
+    'status' => $isConfident ? 'success' : 'pending_validation',
+
+    'message' => $isConfident
+        ? 'Imagem processada com sucesso'
+        : 'Identificação requer validação manual',
+
+    'data' => [
+
+        'identification_id' => $identificationId,
+
+        'image' => [
+            'name' => $_FILES['image']['name'],
+            'url' => $uploadResult['url'],
+            'type' => $_FILES['image']['type'],
+            'size' => $_FILES['image']['size']
+        ],
+
+        'classification' => [
+            'species' => $classificationResult['species'] ?? null,
+
+            'confidence' => round(
+                $classificationResult['confidence'] * 100,
+                2
+            ),
+
+            'validated' => $isConfident
+        ],
+
+        'processing' => [
+            'date' => date('Y-m-d H:i:s'),
+            'model' => 'species_classifier.rbx',
+            'api_version' => '1.0'
+        ]
+    ]
+];
+
+if (!$isConfident && !empty($classificationResult['species'])) {
+
+    $response['data']['classification']['suggestion']
+        = $classificationResult['species'];
+}
+
+file_put_contents(
+    __DIR__ . '/../../storage/last-response-front.json',
+    json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
+);
+
+$this->json($response);
 
         } catch (\Exception $e) {
             $this->json(['error' => $e->getMessage()], 400);

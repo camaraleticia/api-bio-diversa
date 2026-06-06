@@ -296,3 +296,59 @@ Executando comando:
 php '/var/www/html/app/ML/classify_image.php' --image='/var/www/html/public/uploads/images/img_69f334a9b5bfb4.76130548.jpg' --model='/var/www/html/app/ML/models/species_classifier.rbx' --json
 Saída:
 {"species":"Capivara (Hydrochoerus hydrochaeris)","confidence":0.9999}
+Executando comando:
+php '/var/www/html/app/ML/classify_image.php' --image='/var/www/html/public/uploads/images/img_6a05fd5fa6f668.98472571.jpg' --model='/var/www/html/app/ML/models/species_classifier.rbx' --json
+Saída:
+{"species":"Graxaim (Lycalopex gymnocercus)","confidence":1}
+Executando comando:
+php '/var/www/html/app/ML/classify_image.php' --image='/var/www/html/public/uploads/images/img_6a06043a38b6d4.30993525.jpeg' --model='/var/www/html/app/ML/models/species_classifier.rbx' --json
+Saída:
+{"species":"Graxaim (Lycalopex gymnocercus)","confidence":1}
+Executando comando:
+php '/var/www/html/app/ML/classify_image.php' --image='/var/www/html/public/uploads/images/img_6a071ba57cc009.94961607.jpeg' --model='/var/www/html/app/ML/models/species_classifier.rbx' --json
+Saída:
+{"species":"Graxaim (Lycalopex gymnocercus)","confidence":1}
+Executando comando:
+php '/var/www/html/app/ML/classify_image.php' --image='/var/www/html/public/uploads/images/img_6a0724955400e9.49172542.jpeg' --model='/var/www/html/app/ML/models/species_classifier.rbx' --json
+Saída:
+{"species":"Graxaim (Lycalopex gymnocercus)","confidence":1}
+Executando comando:
+php '/var/www/html/app/ML/classify_image.php' --image='/var/www/html/public/uploads/images/img_6a0725debef653.21821869.jpeg' --model='/var/www/html/app/ML/models/species_classifier.rbx' --json
+Saída:
+{"species":"Graxaim (Lycalopex gymnocercus)","confidence":1}
+Executando comando:
+php '/var/www/html/app/ML/classify_image.php' --image='/var/www/html/public/uploads/images/img_6a07261c310098.23454720.jpeg' --model='/var/www/html/app/ML/models/species_classifier.rbx' --json
+Saída:
+{"species":"Graxaim (Lycalopex gymnocercus)","confidence":1}
+Executando comando:
+php '/var/www/html/app/ML/classify_image.php' --image='/var/www/html/public/uploads/images/img_6a0726a77dc135.93044448.jpeg' --model='/var/www/html/app/ML/models/species_classifier.rbx' --json
+Saída:
+{"species":"Graxaim (Lycalopex gymnocercus)","confidence":1}
+Executando comando:
+php '/var/www/html/app/ML/classify_image.php' --image='/var/www/html/public/uploads/images/img_6a07278e275506.15910781.jpeg' --model='/var/www/html/app/ML/models/species_classifier.rbx' --json
+Saída:
+{"species":"Graxaim (Lycalopex gymnocercus)","confidence":1}
+Executando comando:
+php '/var/www/html/app/ML/classify_image.php' --image='/var/www/html/public/uploads/images/img_6a07289c1870a4.87520452.jpeg' --model='/var/www/html/app/ML/models/species_classifier.rbx' --json
+Saída:
+{"species":"Graxaim (Lycalopex gymnocercus)","confidence":1}
+Executando comando:
+php '/var/www/html/app/ML/classify_image.php' --image='/var/www/html/public/uploads/images/img_6a072a3e2ecb89.70878317.jpeg' --model='/var/www/html/app/ML/models/species_classifier.rbx' --json
+Saída:
+{"species":"Graxaim (Lycalopex gymnocercus)","confidence":1}
+Executando comando:
+php '/var/www/html/app/ML/classify_image.php' --image='/var/www/html/public/uploads/images/img_6a072b883b27f0.60389490.jpeg' --model='/var/www/html/app/ML/models/species_classifier.rbx' --json
+Saída:
+{"species":"Graxaim (Lycalopex gymnocercus)","confidence":1}
+Executando comando:
+php '/var/www/html/app/ML/classify_image.php' --image='/var/www/html/public/uploads/images/img_6a072c04a439c8.47667335.jpeg' --model='/var/www/html/app/ML/models/species_classifier.rbx' --json
+Saída:
+{"species":"Graxaim (Lycalopex gymnocercus)","confidence":1}
+Executando comando:
+php '/var/www/html/app/ML/classify_image.php' --image='/var/www/html/public/uploads/images/img_6a072f348eeaf5.06693779.jpeg' --model='/var/www/html/app/ML/models/species_classifier.rbx' --json
+Saída:
+{"species":"Graxaim (Lycalopex gymnocercus)","confidence":1}
+Executando comando:
+php '/var/www/html/app/ML/classify_image.php' --image='/var/www/html/public/uploads/images/img_6a0b1493368734.11076067.jpg' --model='/var/www/html/app/ML/models/species_classifier.rbx' --json
+Saída:
+{"species":"Graxaim (Lycalopex gymnocercus)","confidence":1}

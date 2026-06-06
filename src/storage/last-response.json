@@ -1,0 +1,23 @@
+{
+    "status": "success",
+    "message": "Imagem processada com sucesso",
+    "data": {
+        "identification_id": "35",
+        "image": {
+            "name": "image.jpeg",
+            "url": "\/uploads\/images\/img_6a072f348eeaf5.06693779.jpeg",
+            "type": "image\/jpeg",
+            "size": 7520
+        },
+        "classification": {
+            "species": "Graxaim (Lycalopex gymnocercus)",
+            "confidence": 100,
+            "validated": true
+        },
+        "processing": {
+            "date": "2026-05-15 14:35:41",
+            "model": "species_classifier.rbx",
+            "api_version": "1.0"
+        }
+    }
+}
