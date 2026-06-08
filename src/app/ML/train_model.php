@@ -5,7 +5,7 @@
  * Este script treina um modelo de classificação de imagens usando RubixML
  * para identificar espécies da fauna e flora da Região Carbonífera.
  *
- * Uso: php train_model.php [--epochs=100] [--batch=32] [--output=model.rbx] [--grayscale]
+ * Uso: php train_model.php [--epochs=100] [--batch=32] [--output=model.rbx]
  */
 
 // Aumenta o limite de memória para o processo atual
@@ -21,12 +21,11 @@ ini_set('error_log', '/tmp/php_cli_errors.log');
 
 
 
-// Definir constante ROOT_DIR — aponta para /var/www/html (raiz do projeto)
-// Consistente com public/index.php e com RubixMLClassificationService
-define('ROOT_DIR', dirname(dirname(__DIR__)));
+// Definir constante ROOT_DIR
+define('ROOT_DIR', dirname(__DIR__));
 
 // Carregar o autoloader
-require_once ROOT_DIR . '/vendor/autoload.php';
+require_once ROOT_DIR . '/../vendor/autoload.php';
 
 // Importar classes do RubixML
 use Rubix\ML\Classifiers\MultilayerPerceptron;
@@ -42,12 +41,11 @@ use Rubix\ML\Pipeline;
 use Rubix\ML\Transformers\ZScaleStandardizer;
 
 // Processar argumentos da linha de comando
-$options = getopt('', ['epochs:', 'batch:', 'output:', 'kfold::', 'grayscale']);
-$epochs     = $options['epochs'] ?? 100;
-$batchSize  = $options['batch'] ?? 32;
+$options = getopt('', ['epochs:', 'batch:', 'output:', 'kfold::']);
+$epochs = $options['epochs'] ?? 100;
+$batchSize = $options['batch'] ?? 32;
 $outputPath = $options['output'] ?? ROOT_DIR . '/app/ML/models/species_classifier.rbx';
-$kfold      = isset($options['kfold']) ? (int)$options['kfold'] : 0; // 0 = desativado
-$useGrayscale = isset($options['grayscale']); // flag --grayscale ativa escala de cinza; padrão: RGB
+$kfold = isset($options['kfold']) ? (int)$options['kfold'] : 0; // 0 = desativado
 
 // Garantir que o diretório de saída existe
 $outputDir = dirname($outputPath);
@@ -59,7 +57,6 @@ echo "Iniciando treinamento do modelo de classificação de espécies\n";
 echo "Épocas: $epochs\n";
 echo "Tamanho do batch: $batchSize\n";
 echo "Arquivo de saída: $outputPath\n";
-echo "Modo de cor: " . ($useGrayscale ? "Escala de cinza (256 features)" : "RGB colorido (768 features)") . "\n";
 if ($kfold > 1) {
     echo "K-Fold CV: {$kfold} folds\n";
 }
@@ -73,7 +70,7 @@ try {
 
     // Diretório com as imagens de treinamento organizadas por classe
     // Corrigido para respeitar capitalização (Linux é case-sensitive)
-    $datasetDir = ROOT_DIR . '/app/ML/Dataset';
+    $datasetDir = ROOT_DIR . '/ML/Dataset';
 
     // Verificar se o diretório existe
     if (!is_dir($datasetDir)) {
@@ -112,7 +109,7 @@ try {
 
             foreach ($imagePaths as $imagePath) {
                 // Processar a imagem e extrair características
-                $vector = preprocessImage($imagePath, $useGrayscale);
+                $vector = preprocessImage($imagePath);
 
                 if ($vector !== null) {
                     $samples[] = $vector;
@@ -159,7 +156,7 @@ try {
     $kfoldMetrics = [];
     if ($kfold > 1) {
         echo "Executando Cross Validation ({$kfold}-fold)...\n";
-        $kfoldMetrics = runKFold($dataset, $kfold, $epochs, $batchSize, $uniqueClasses, $useGrayscale);
+        $kfoldMetrics = runKFold($dataset, $kfold, $epochs, $batchSize, $uniqueClasses);
         echo sprintf("CV Accuracy média: %.2f%% (σ=%.2f) | Macro F1 média: %.2f%%\n\n",
             $kfoldMetrics['accuracy_mean']*100,
             $kfoldMetrics['accuracy_std']*100,
@@ -185,11 +182,11 @@ try {
     echo "Conjunto de teste: " . $testing->numSamples() . " amostras\n\n";
 
     // Criar e configurar o estimador (rede neural) - reduzido para input 16x16 (256 features)
-    echo "Configurando modelo de rede neural leve (16x16 grayscale)...\n";
+    echo "Configurando modelo de rede neural leve (32x32 grayscale)...\n";
     $estimator = new MultilayerPerceptron([
         new Dense(128),
         new Activation(new LeakyReLU()),
-        new Dropout($dropoutRate),
+        new Dropout(0.2),
         new Dense(32),
         new Activation(new LeakyReLU()),
     ], $epochs, new Adam(0.001), $batchSize);
@@ -248,17 +245,15 @@ try {
 
     // Salvar relatório JSON
     $report = [
-        'timestamp'        => date('c'),
-        'epochs'           => (int)$epochs,
-        'batch_size'       => (int)$batchSize,
-        'kfold'            => $kfold > 1 ? $kfold : null,
-        'color_mode'       => $useGrayscale ? 'grayscale' : 'rgb',
-        'features_per_sample' => $useGrayscale ? 256 : 768,
-        'classes'          => $uniqueClasses,
+        'timestamp' => date('c'),
+        'epochs' => (int)$epochs,
+        'batch_size' => (int)$batchSize,
+        'kfold' => $kfold > 1 ? $kfold : null,
+        'classes' => $uniqueClasses,
         'test' => [
-            'accuracy'         => $testEval['accuracy'],
-            'macro_f1'         => $testEval['macro_f1'],
-            'per_class'        => $testEval['per_class'],
+            'accuracy' => $testEval['accuracy'],
+            'macro_f1' => $testEval['macro_f1'],
+            'per_class' => $testEval['per_class'],
             'confusion_matrix' => $testEval['confusion_matrix'],
         ],
         'cross_validation' => $kfoldMetrics ?: null,
@@ -358,11 +353,10 @@ try {
  * ATENÇÃO: este pipeline deve ser IDÊNTICO ao de RubixMLClassificationService::preprocessImage().
  * Qualquer divergência reduz a acurácia na inferência.
  *
- * @param string $imagePath  Caminho para a imagem
- * @param bool   $grayscale  true = escala de cinza (256 features) | false = RGB (768 features)
- * @return array|null Vetor de features normalizado ou null em caso de erro
+ * @param string $imagePath Caminho para a imagem
+ * @return array|null Vetor de 256 features (16×16 grayscale normalizado) ou null em caso de erro
  */
-function preprocessImage(string $imagePath, bool $grayscale = false): ?array
+function preprocessImage(string $imagePath): ?array
 {
     try {
         $imageData = file_get_contents($imagePath);
@@ -377,7 +371,7 @@ function preprocessImage(string $imagePath, bool $grayscale = false): ?array
             return null;
         }
 
-        $size = 16; // 16x16 pixels
+        $size = 16; // 16x16 => 256 features (grayscale)
 
         $resized = imagecreatetruecolor($size, $size);
         if (!$resized) {
@@ -409,26 +403,18 @@ function preprocessImage(string $imagePath, bool $grayscale = false): ?array
                 $r = ($rgb >> 16) & 0xFF;
                 $g = ($rgb >> 8) & 0xFF;
                 $b = $rgb & 0xFF;
-
-                if ($grayscale) {
-                    // Luminância ponderada — 1 feature por pixel
-                    $vector[] = (0.299 * $r + 0.587 * $g + 0.114 * $b) / 255.0;
-                } else {
-                    // RGB normalizado — 3 features por pixel
-                    $vector[] = $r / 255.0;
-                    $vector[] = $g / 255.0;
-                    $vector[] = $b / 255.0;
-                }
+                // Conversão para escala de cinza e normalização [0, 1]
+                $gray = (0.299 * $r + 0.587 * $g + 0.114 * $b) / 255.0;
+                $vector[] = $gray;
             }
         }
 
         imagedestroy($image);
         imagedestroy($resized);
 
-        // Validação da dimensão
-        $expectedSize = $size * $size * ($grayscale ? 1 : 3);
-        if (count($vector) !== $expectedSize) {
-            echo "  [AVISO] Dimensão inesperada do vetor (" . count($vector) . " features, esperado {$expectedSize}): $imagePath\n";
+        // Validação da dimensão — deve ser sempre $size * $size
+        if (count($vector) !== ($size * $size)) {
+            echo "  [AVISO] Dimensão inesperada do vetor (" . count($vector) . " features): $imagePath\n";
             return null;
         }
 
@@ -444,7 +430,7 @@ function preprocessImage(string $imagePath, bool $grayscale = false): ?array
  * Executa K-Fold cross validation manual para o pipeline definido
  * @return array
  */
-function runKFold(Labeled $dataset, int $k, int $epochs, int $batchSize, array $classes, bool $grayscale = false): array
+function runKFold(Labeled $dataset, int $k, int $epochs, int $batchSize, array $classes): array
 {
     $n = $dataset->numSamples();
     if ($k < 2 || $k > $n) return [];
@@ -493,12 +479,11 @@ function runKFold(Labeled $dataset, int $k, int $epochs, int $batchSize, array $
         $trainSet = new Labeled($trainSamples, $trainLabels);
         $testSet  = new Labeled($testSamples, $testLabels);
 
-        // Recriar o mesmo estimador usado no treino principal (dropout ajustado por modo de cor)
-        $dropoutRate = $grayscale ? 0.2 : 0.4;
+        // Recriar o mesmo estimador leve usado no treino principal
         $estimator = new MultilayerPerceptron([
             new Dense(128),
             new Activation(new LeakyReLU()),
-            new Dropout($dropoutRate),
+            new Dropout(0.2),
             new Dense(32),
             new Activation(new LeakyReLU()),
         ], $epochs, new Adam(0.001), $batchSize);

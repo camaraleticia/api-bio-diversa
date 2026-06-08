@@ -31,6 +31,10 @@ class ImageUploadService
      */
     public function upload($file)
     {
+        $logFile = ROOT_DIR . '/debug_upload_service.log';
+
+        file_put_contents($logFile, "Iniciando upload()\n", FILE_APPEND);
+        file_put_contents($logFile, print_r($file, true), FILE_APPEND);
 
         // verificar se o arquivo foi enviado
         if (!isset($file['tmp_name']) || empty($file['tmp_name'])) {
@@ -78,6 +82,7 @@ class ImageUploadService
             throw new \Exception('Erro ao salvar o arquivo.');
         }
 
+        file_put_contents($logFile, "Arquivo salvo em: $destination\n", FILE_APPEND);
 
         // retornar dados
         return [

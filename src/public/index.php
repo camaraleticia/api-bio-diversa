@@ -7,9 +7,6 @@
 // Define a constante de diretório raiz
 define('ROOT_DIR', dirname(__DIR__));
 
-// Carrega o autoloader do Composer (dependências externas: RubixML, PhpOffice, etc.)
-require_once ROOT_DIR . '/vendor/autoload.php';
-
 // Carrega o autoloader
 require_once ROOT_DIR . '/app/Core/Autoloader.php';
 

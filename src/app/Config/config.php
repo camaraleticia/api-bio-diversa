@@ -18,7 +18,6 @@ return [
         'api_url' => 'https://api.example.com/v1/classify', // Será substituído pela API real
         'api_key' => 'your-api-key', // Será substituído pela chave real
         'confidence_threshold' => 0.7, // Limiar de confiança para validação manual
-        'enable_logging' => true, // Habilitar logs de erro (desabilitar em produção)
     ],
     
     // Configurações de upload de imagens

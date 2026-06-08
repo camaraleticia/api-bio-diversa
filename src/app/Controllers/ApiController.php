@@ -5,7 +5,7 @@ use App\Core\Controller;
 use App\Models\Species;
 use App\Models\Identification;
 use App\Services\ImageUploadService;
-use App\Services\RubixMLClassificationService;
+use App\Services\ImageClassificationService;
 
 /**
  * Controlador para os endpoints da API
@@ -22,7 +22,7 @@ class ApiController extends Controller
         $this->speciesModel = new Species();
         $this->identificationModel = new Identification();
         $this->uploadService = new ImageUploadService();
-        $this->classificationService = new RubixMLClassificationService();
+        $this->classificationService = new ImageClassificationService();
 
         // Verificar a autenticação por API Key
         $this->checkApiKey();
