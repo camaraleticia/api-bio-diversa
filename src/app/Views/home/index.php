@@ -59,6 +59,16 @@
             </div>
             <div class="species-card">
                 <div class="species-image">
+                    <img src="/img/veado.jpg" alt="Veado" onerror="this.src='/img/placeholder.jpg'; this.onerror=null;">
+                </div>
+                <div class="species-info">
+                    <h4>Veado Campeiro</h4>
+                    <p class="scientific-name">Ozotoceros bezoarticus</p>
+                    <span class="species-type fauna">Fauna</span>
+                </div>
+            </div>
+            <div class="species-card">
+                <div class="species-image">
                     <img src="/img/babosa-do-campo.jpeg" alt="Babosa-do-campo" onerror="this.src='/img/placeholder.jpg'; this.onerror=null;">
                 </div>
                 <div class="species-info">
